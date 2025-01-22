@@ -38,7 +38,7 @@ A full-stack web application that helps users quickly generate a job-targeted ve
    cd server
    npm install
 3. **Install** client dependencies:
-```bash
-  Copy
-  cd ../client
-  npm install
+   ```bash
+   Copy
+   cd ../client
+   npm install
