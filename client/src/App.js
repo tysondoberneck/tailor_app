@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
 function App() {
-  // Existing states
   const [resumeFile, setResumeFile] = useState(null);
   const [resumeText, setResumeText] = useState('');
   const [jobDescription, setJobDescription] = useState('');
-
-  // NEW: Additional accomplishments
   const [additionalAccomplishments, setAdditionalAccomplishments] = useState('');
 
   // GPT-4 outputs
@@ -17,29 +14,51 @@ function App() {
   const [misalignment, setMisalignment] = useState('');
   const [matchPercentage, setMatchPercentage] = useState('');
 
-  // Other states
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Handle file selection
+  // (A) Warn user if they refresh/close the page
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // Chrome requires a returnValue to show the prompt
+      event.preventDefault();
+      event.returnValue = 'Are you sure you want to leave? Unsaved changes may be lost.';
+      return 'Are you sure you want to leave? Unsaved changes may be lost.';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  // Helper: copy text to clipboard
+  const copyToClipboard = (text) => {
+    if (!text) return;
+    navigator.clipboard.writeText(text).catch((err) => {
+      console.error('Failed to copy: ', err);
+    });
+  };
+
+  // File selection
   const handleFileChange = (e) => {
     setResumeFile(e.target.files[0]);
   };
 
-  // Upload PDF & parse resume
+  // Upload & parse resume
   const handleUpload = async () => {
     if (!resumeFile) {
       alert('Please select a PDF resume first.');
       return;
     }
-
     setLoading(true);
     setErrorMsg('');
+    setResumeText('');
     setBulletPoints('');
     setAlignment('');
     setMisalignment('');
     setMatchPercentage('');
-    setResumeText('');
 
     try {
       const formData = new FormData();
@@ -58,7 +77,7 @@ function App() {
     }
   };
 
-  // Generate GPT-4 summary with bullet points, alignment, etc.
+  // Generate GPT-4 summary
   const handleGenerate = async () => {
     if (!jobDescription.trim()) {
       alert('Please paste the job description.');
@@ -68,7 +87,6 @@ function App() {
       alert('No resume text found. Please upload your resume first.');
       return;
     }
-
     setLoading(true);
     setErrorMsg('');
     setBulletPoints('');
@@ -102,39 +120,48 @@ function App() {
       <div className="input-form">
         {/* 1) Upload Resume */}
         <div className="form-group">
-          <label>Upload PDF Resume:</label>
-          <input type="file" accept=".pdf" onChange={handleFileChange} />
+          <label htmlFor="resumeUpload" className="file-label">
+            Resume (PDF)
+          </label>
+          <input
+            id="resumeUpload"
+            type="file"
+            accept=".pdf"
+            className="file-input"
+            onChange={handleFileChange}
+          />
           <button onClick={handleUpload} disabled={loading}>
             {loading ? 'Uploading...' : 'Upload & Parse'}
           </button>
         </div>
 
-        {/* Resume Text Preview */}
+        {/* 2) Editable Resume Text */}
         {resumeText && (
-          <div style={{ marginTop: '10px' }}>
-            <strong>Extracted Resume Text (Preview):</strong>
-            <pre>
-              {resumeText.length > 500
-                ? resumeText.substring(0, 500) + '...'
-                : resumeText}
-            </pre>
+          <div className="text-area-container form-group">
+            <label>Resume Text (Editable)</label>
+            <button
+              className="copy-button"
+              onClick={() => copyToClipboard(resumeText)}
+            >
+              Copy
+            </button>
+            <textarea
+              rows={8}
+              value={resumeText}
+              onChange={(e) => setResumeText(e.target.value)}
+            />
           </div>
         )}
 
-                {/* NEW: Additional Accomplishments */}
-                <div className="form-group">
-          <label>Additional Accomplishments (not in resume):</label>
-          <textarea
-            rows={4}
-            value={additionalAccomplishments}
-            onChange={(e) => setAdditionalAccomplishments(e.target.value)}
-            placeholder="List any extra achievements you'd like considered..."
-          />
-        </div>
-
-        {/* 2) Job Description */}
-        <div className="form-group">
-          <label>Paste Job Description:</label>
+        {/* 3) Job Description */}
+        <div className="text-area-container form-group">
+          <label>Job Description</label>
+          <button
+            className="copy-button"
+            onClick={() => copyToClipboard(jobDescription)}
+          >
+            Copy
+          </button>
           <textarea
             rows={6}
             value={jobDescription}
@@ -143,7 +170,24 @@ function App() {
           />
         </div>
 
-        {/* 3) Generate */}
+        {/* 4) Additional Accomplishments */}
+        <div className="text-area-container form-group">
+          <label>Additional Accomplishments</label>
+          <button
+            className="copy-button"
+            onClick={() => copyToClipboard(additionalAccomplishments)}
+          >
+            Copy
+          </button>
+          <textarea
+            rows={4}
+            value={additionalAccomplishments}
+            onChange={(e) => setAdditionalAccomplishments(e.target.value)}
+            placeholder="List extra achievements you'd like considered..."
+          />
+        </div>
+
+        {/* 5) Generate */}
         <button onClick={handleGenerate} disabled={loading}>
           {loading ? 'Processing...' : 'Generate Tailored Info'}
         </button>
@@ -156,28 +200,64 @@ function App() {
       {bulletPoints && (
         <div className="result-section">
           <h2>Tailored Bullet Points</h2>
-          <pre className="resume-output">{bulletPoints}</pre>
+          <div className="pre-wrapper">
+            <button
+              className="copy-button"
+              onClick={() => copyToClipboard(bulletPoints)}
+            >
+              Copy
+            </button>
+            <pre className="resume-output">{bulletPoints}</pre>
+          </div>
         </div>
       )}
 
       {/* Alignment / Misalignment / Match */}
       {(alignment || misalignment || matchPercentage) && (
         <div className="result-section">
-          <h2>Alignment & Match</h2>
           {alignment && (
-            <>
+            <div className="text-area-container">
               <h3>Aligned Areas</h3>
-              <pre className="resume-output">{alignment}</pre>
-            </>
+              <div className="pre-wrapper">
+                <button
+                  className="copy-button"
+                  onClick={() => copyToClipboard(alignment)}
+                >
+                  Copy
+                </button>
+                <pre className="resume-output">{alignment}</pre>
+              </div>
+            </div>
           )}
+
           {misalignment && (
-            <>
+            <div className="text-area-container">
               <h3>Misaligned / Missing Areas</h3>
-              <pre className="resume-output">{misalignment}</pre>
-            </>
+              <div className="pre-wrapper">
+                <button
+                  className="copy-button"
+                  onClick={() => copyToClipboard(misalignment)}
+                >
+                  Copy
+                </button>
+                <pre className="resume-output">{misalignment}</pre>
+              </div>
+            </div>
           )}
+
           {matchPercentage && (
-            <h3>Match Percentage: {matchPercentage}%</h3>
+            <div className="text-area-container">
+              <h3>Match Percentage</h3>
+              <div className="pre-wrapper">
+                <button
+                  className="copy-button"
+                  onClick={() => copyToClipboard(matchPercentage)}
+                >
+                  Copy
+                </button>
+                <pre className="resume-output">{matchPercentage}%</pre>
+              </div>
+            </div>
           )}
         </div>
       )}
