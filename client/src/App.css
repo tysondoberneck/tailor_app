@@ -1,195 +1,251 @@
 /* App.css */
 
-/* Basic resets and font (optional) */
+/* Base / Global */
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #212121; /* Night mode background */
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #ECECEC; /* White text for contrast */
+  background-color: #212121; 
+  color: #ececec;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
   height: 100%;
 }
 
 .app-container {
   max-width: 900px;
   margin: 40px auto;
-  padding: 0 20px;
+  padding: 0 16px;
 }
 
-/* Main Title */
 h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  padding-top: 16px;
 }
 
-/* Input Form Container */
+/* Black container for the form */
 .input-form {
-  background-color: #212121; /* Dark overlay color */
-  padding: 30px;
+  background-color: #000000;
+  border: 1px solid #565869;
   border-radius: 8px;
-  border: 1px solid #555;
-  margin-bottom: 30px;
+  /* Add horizontal padding on both sides */
+  padding: 24px 12px;
+  margin-bottom: 24px;
+  box-sizing: border-box; /* ensures padding doesn't shrink content area */
 }
 
-/* Form Groups */
+/* Each label + field group */
 .form-group {
-  margin-bottom: 20px;
-  position: relative; /* For copy buttons if needed */
+  position: relative;
+  margin-bottom: 24px;
 }
 
 label {
   display: block;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #ECECEC;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #ececec;
+  font-size: 0.95rem;
 }
 
-/* Hidden File Input, Styled Label as Button */
+/* Hidden file input, label as a button */
 .file-input {
   display: none;
 }
 
 .file-label {
   display: inline-block;
-  background-color: #111;
-  color: #ECECEC;
-  padding: 12px 20px;
+  background-color: #565869;
+  color: #ececec;
+  padding: 8px 16px;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   margin-right: 10px;
   transition: background-color 0.2s ease;
+  border: 1px solid #6b6d76;
+  font-size: 0.9rem;
 }
 
 .file-label:hover {
-  background-color: #333;
+  background-color: #6b6d76;
 }
 
-/* Buttons */
+/* Generic buttons */
 button {
-  background-color: #111;
-  color: #ECECEC;
-  padding: 12px 16px;
-  font-size: 16px;
-  border: 1px solid #444;
+  background-color: #565869;
+  color: #ececec;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border: 1px solid #6b6d76;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
   margin-top: 5px;
 }
 
 button:hover {
-  background-color: #333;
+  background-color: #6b6d76;
 }
 
 button:disabled {
-  background-color: #666;
+  background-color: #3e3f42;
   cursor: not-allowed;
 }
 
-/* Copy Button overlay */
+/* We no longer have copy-button for input text areas; 
+   if needed for results, it’s absolutely positioned. */
 .copy-button {
   position: absolute;
-  top: 0;
-  right: 0;
-  padding: 6px 12px;
-  font-size: 16px;
-  border: 1px solid #555;
+  top: 8px;
+  right: 10px; /* slightly away from the edge */
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  border: 1px solid #6b6d76;
   border-radius: 4px;
-  background-color: #000000;
-  color: #ECECEC;
+  background-color: #565869;
+  color: #ececec;
   cursor: pointer;
   opacity: 0.8;
   transition: opacity 0.2s ease;
 }
 
 .copy-button:hover {
-  opacity: 1;
+  opacity: 1.0;
 }
 
-/* Textareas - vertical only resize */
+/* Text areas: more right padding to avoid text hugging the border */
 textarea {
   width: 100%;
-  padding: 12px;
-  border: 2px solid #555;
+  padding: 12px 24px 12px 12px; /* top=12, right=24, bottom=12, left=12 */
+  background-color: #000000;
+  border: 1px solid #565869;
   border-radius: 4px;
+  color: #ececec;
   font-family: inherit;
-  font-size: 16px;
-  transition: border-color 0.2s ease;
+  font-size: 0.95rem;
+  resize: vertical; 
   outline: none;
-  resize: vertical; /* only left-right */
-  overflow: auto;
-  min-height: 80px; 
-  background-color: #000000; /* Very dark background for text area */
-  color: #ECECEC;
+  box-sizing: border-box; /* ensures padding is included properly */
+  white-space: pre-wrap;
 }
 
 textarea:focus {
-  border-color: #ECECEC;
+  border-color: #8e9098;
 }
 
-/* Error message */
+/* Show errors in red */
 .error-message {
   color: #f66;
   margin-top: 10px;
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-/* Result Sections (night mode boxes) */
+/* Result sections (similar black box) */
 .result-section {
-  background-color: #323232D9; 
-  padding: 20px;
+  background-color: #000000;
+  border: 1px solid #565869;
   border-radius: 8px;
-  border: 1px solid #555;
-  margin-bottom: 30px;
+  /* horizontal padding on both sides */
+  padding: 24px 12px;
+  margin-bottom: 24px;
+  box-sizing: border-box;
 }
 
-/* Pre-wrapper for code-like blocks with copy button overlay */
-.pre-wrapper {
-  position: relative;
-  margin-top: 10px;
-}
-
-/* The code box, vertically resizable, wrapping text */
-.resume-output {
-  background: #000000; 
-  border: 1px solid #555;
-  border-radius: 4px;
-  padding: 12px;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 16px;
-  line-height: 1.5;
-  overflow: auto;
-  resize: vertical;
-  min-height: 80px;
-  margin: 0;
-  color: #ECECEC;
-
-  /* Let text wrap to fit the resized width */
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-/* Headings inside results */
 .result-section h2 {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-top: 0;
-  margin-bottom: 1rem;
-  color: #ECECEC;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .result-section h3 {
   font-size: 1rem;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-  color: #ECECEC;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: #ffffff;
 }
 
-/* Container for text areas in the form */
+/* A container for code-like GPT output */
+.pre-wrapper {
+  position: relative;
+  margin-top: 8px;
+}
+
+/* GPT-like block with extra right padding */
+.resume-output {
+  background: #000000;
+  border: 1px solid #565869;
+  border-radius: 4px;
+  /* top=12, right=24, bottom=12, left=12 */
+  padding: 12px 24px 12px 12px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #ececec;
+  overflow: auto;
+  resize: vertical;
+  min-height: 80px;
+  margin: 0;
+  box-sizing: border-box;
+
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Extra container if needed around text areas */
 .text-area-container {
   position: relative;
+  margin-bottom: 24px;
+}
+
+/* Make the vertical scrollbar thumb BLACK, with a slightly lighter track */
+
+/* The entire scrollbar width */
+::-webkit-scrollbar {
+  width: 8px;
+  background: transparent; 
+}
+
+/* The track (background area behind the thumb) */
+::-webkit-scrollbar-track {
+  background-color: #2b2b2b; /* Dark gray for contrast */
+  margin: 2px;              /* optional spacing */
+}
+
+/* The draggable thumb - now BLACK */
+::-webkit-scrollbar-thumb {
+  background-color: #000000; /* black thumb */
+  border-radius: 6px;        /* smooth edges */
+  border: 2px solid #2b2b2b; /* optional border to create a gap around the thumb */
+}
+
+/* Hover effect for the thumb */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #222222;  /* slightly lighter black on hover */
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #000000 !important;
+  border: none !important;
+  background-image: none !important;
+}
+
+/* Sometimes the corner is treated as a “track corner” in certain browsers */
+::-webkit-scrollbar-track-corner {
+  background-color: #000000 !important;
+  border: none !important;
+  background-image: none !important;
+}
+
+/* If there's a diagonal resizer in textareas, also set it to black */
+::-webkit-resizer {
+  background-color: #000000 !important;
+  border: none !important;
+  background-image: none !important;
 }

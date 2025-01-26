@@ -17,10 +17,9 @@ function App() {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // (A) Warn user if they refresh/close the page
+  // Warn user if they refresh/close the page
   useEffect(() => {
     const handleBeforeUnload = (event) => {
-      // Chrome requires a returnValue to show the prompt
       event.preventDefault();
       event.returnValue = 'Are you sure you want to leave? Unsaved changes may be lost.';
       return 'Are you sure you want to leave? Unsaved changes may be lost.';
@@ -33,7 +32,7 @@ function App() {
     };
   }, []);
 
-  // Helper: copy text to clipboard
+  // Helper: copy text to clipboard (used only for final results)
   const copyToClipboard = (text) => {
     if (!text) return;
     navigator.clipboard.writeText(text).catch((err) => {
@@ -41,7 +40,7 @@ function App() {
     });
   };
 
-  // File selection
+  // Handle file selection
   const handleFileChange = (e) => {
     setResumeFile(e.target.files[0]);
   };
@@ -135,16 +134,11 @@ function App() {
           </button>
         </div>
 
-        {/* 2) Editable Resume Text */}
+        {/* 2) Editable Resume Text (NO copy button) */}
         {resumeText && (
           <div className="text-area-container form-group">
             <label>Resume Text (Editable)</label>
-            <button
-              className="copy-button"
-              onClick={() => copyToClipboard(resumeText)}
-            >
-              Copy
-            </button>
+            {/* copy button removed */}
             <textarea
               rows={8}
               value={resumeText}
@@ -153,15 +147,10 @@ function App() {
           </div>
         )}
 
-        {/* 3) Job Description */}
+        {/* 3) Job Description (NO copy button) */}
         <div className="text-area-container form-group">
           <label>Job Description</label>
-          <button
-            className="copy-button"
-            onClick={() => copyToClipboard(jobDescription)}
-          >
-            Copy
-          </button>
+          {/* copy button removed */}
           <textarea
             rows={6}
             value={jobDescription}
@@ -170,15 +159,10 @@ function App() {
           />
         </div>
 
-        {/* 4) Additional Accomplishments */}
+        {/* 4) Additional Accomplishments (NO copy button) */}
         <div className="text-area-container form-group">
           <label>Additional Accomplishments</label>
-          <button
-            className="copy-button"
-            onClick={() => copyToClipboard(additionalAccomplishments)}
-          >
-            Copy
-          </button>
+          {/* copy button removed */}
           <textarea
             rows={4}
             value={additionalAccomplishments}
@@ -196,7 +180,7 @@ function App() {
       {/* Error message */}
       {errorMsg && <p className="error-message">{errorMsg}</p>}
 
-      {/* Bullet Points */}
+      {/* Tailored Bullet Points (copy button remains) */}
       {bulletPoints && (
         <div className="result-section">
           <h2>Tailored Bullet Points</h2>
@@ -212,7 +196,7 @@ function App() {
         </div>
       )}
 
-      {/* Alignment / Misalignment / Match */}
+      {/* Alignment / Misalignment / Match (copy buttons remain if desired) */}
       {(alignment || misalignment || matchPercentage) && (
         <div className="result-section">
           {alignment && (
