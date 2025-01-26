@@ -171,13 +171,11 @@ textarea:focus {
   color: #ffffff;
 }
 
-/* A container for code-like GPT output */
 .pre-wrapper {
   position: relative;
   margin-top: 8px;
 }
 
-/* GPT-like block with extra right padding */
 .resume-output {
   background: #000000;
   border: 1px solid #565869;
